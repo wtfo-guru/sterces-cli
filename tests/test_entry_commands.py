@@ -1,13 +1,15 @@
+"""Tests module test_entry_commands for app package sterces-cli."""
+
 from datetime import timezone
 
 import testfixtures
-
-from sterces import cli
 from sterces.foos import str_to_date
+
+from sterces_cli import cli
 
 EG_HELP = """Usage: cli entry [OPTIONS] COMMAND [ARGS]...
 
-  Action group for entries.
+  Command group for entry management.
 
 Options:
   -h, --help  Show this message and exit.
@@ -39,6 +41,7 @@ ENTRY_TEST_UNO = "/test/test1"
 
 
 def base_args(dbx: str, pfn: str, cmd: str) -> list[str]:
+    """Return base args."""
     return [
         "--db",
         dbx,
@@ -52,12 +55,14 @@ def base_args(dbx: str, pfn: str, cmd: str) -> list[str]:
 
 
 def base_args_path(dbx, pfn, cmd, path) -> list[str]:
+    """Return base args with path."""
     cmd_args = base_args(dbx, pfn, cmd)
     cmd_args.extend(["--path", path])
     return cmd_args
 
 
 def test_entry_group_help(cli_runner) -> None:
+    """Test entry group help."""
     test_result = cli_runner.invoke(
         cli.cli, ["entry", "-h"]
     )  # verifies the short context

@@ -6,12 +6,13 @@ from typing import NoReturn, Optional
 
 import click
 from loguru import logger
-from pykeepass.pykeepass import PyKeePass, create_database, debug_setup
+from pykeepass.pykeepass import debug_setup
+from sterces.db import StercesDatabase
 
-from sterces.app import app
-from sterces.constants import CONTEXT_SETTINGS, VERSION
-from sterces.entries import commands as entry_actions
-from sterces.groups import commands as group_actions
+from sterces_cli.constants import CONTEXT_SETTINGS, VERSION
+from sterces_cli.entries import commands as entry_actions
+from sterces_cli.foos import StrIntStrBool, add_arg_if
+from sterces_cli.groups import commands as group_actions
 
 HOME = Path.home()
 DEFAULT_PASSWORD_FILE = HOME / ".sterces/.ssapeek"
@@ -66,7 +67,9 @@ def _configure_logging(verbose: int) -> None:
     "--warn/--no-warn", default=True, help="Warn permissions flag (default True)"
 )
 @click.version_option(VERSION)
+@click.pass_context
 def cli(
+    ctx: click.Context,
     debug: int,
     db: str,
     key_file: Optional[str],
@@ -80,12 +83,12 @@ def cli(
         _configure_logging(verbose)
     elif debug > 1:
         debug_setup()
-    create, pwd = app.pre_flight(db, passphrase_file, key_file, warn)
-    if create:
-        pkobj = create_database(db, pwd, key_file, transformed_key)
-    else:
-        pkobj = PyKeePass(db, pwd, key_file, transformed_key)
-    app.initialize(debug, verbose, pkobj, None)
+    dbargs: StrIntStrBool = {"debug": debug, "verbose": verbose, "warn": warn}
+    add_arg_if(dbargs, "db_fn", db)
+    add_arg_if(dbargs, "pwd_fn", passphrase_file)
+    add_arg_if(dbargs, "key_fn", key_file)
+    add_arg_if(dbargs, "tf_key", transformed_key)
+    ctx.obj = StercesDatabase(**dbargs)
     return 0
 
 
@@ -96,9 +99,10 @@ cli.add_command(entry_actions.entry)
 @cli.command()
 @click.argument("path", type=str)
 @click.argument("attr", default="password")
-def lookup(path: str, attr: str) -> NoReturn:
+@click.pass_obj
+def lookup(ctx: StercesDatabase, path: str, attr: str) -> NoReturn:
     """Lookup attribute of an entry."""
-    sys.exit(app.lookup(path, attr))
+    sys.exit(ctx.lookup(path, attr))
 
 
 if __name__ == "__main__":

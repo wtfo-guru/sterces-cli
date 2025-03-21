@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "sterces"
-version = "0.1.0"
+name = "sterces-cli"
+version = "0.1.0-dev0"
 description = "Command line interface for pykeepass"
 license = "MIT"
 authors = ["Quien Sabe <qs5579@mail.com>"]
@@ -28,15 +28,14 @@ classifiers = [
 ]
 
 [tool.poetry.scripts]
-sterces = "sterces.cli:main"
+sterces = "sterces_cli.cli:cli"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-pykeepass = "^4.1.1.post1"
 click = "^8.1.0"
 loguru = "^0.7.3"
 dateparser = "^1.2.1"
-pyotp = "^2.9.0"
+sterces = {git = "https://github.com/wtfo-guru/sterces.git"}
 
 [tool.poetry.group.test]
 optional = true
@@ -46,7 +45,7 @@ mypy = "^1.0"
 wemake-python-styleguide = "^1.0"
 flake8-pytest-style = ">=1.6,<3.0"
 doc8 = "^1.0"
-docutils = ">=0.19,<0.21"
+docutils = "^0.21"
 nitpick = "^0.35"
 safety = ">=2.3,<4.0"
 pytest = ">=7.4,<9.0"
@@ -56,6 +55,8 @@ black = "^25.0"
 pytest-click = "^1.1.0"
 testfixtures = "^8.3.0"
 types-dateparser = "^1.2.0.20250208"
+flake8-docstrings = "^1.7.0"
+flake8-rst-docstrings = "^0.3.0"
 
 [tool.poetry.group.docs]
 optional = true

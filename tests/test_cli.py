@@ -1,7 +1,9 @@
+"""Tests module test_cli for app package sterces-cli."""
+
 import testfixtures
 
-from sterces import cli
-from sterces.constants import VERSION
+from sterces_cli import cli
+from sterces_cli.constants import VERSION
 
 CLI_HELP = """Usage: cli [OPTIONS] COMMAND [ARGS]...
 
@@ -19,8 +21,9 @@ Options:
   -h, --help                      Show this message and exit.
 
 Commands:
-  entry  Action group for entries.
-  group  Action group for groups.
+  entry   Command group for entry management.
+  group   Command group for group management.
+  lookup  Lookup attribute of an entry.
 """
 
 

@@ -4,31 +4,38 @@ import sys
 from typing import NoReturn
 
 import click
+from sterces.constants import ADD, REMOVE, SHOW
+from sterces.db import StercesDatabase
 
-from sterces.app import app
-from sterces.constants import ADD, CONTEXT_SETTINGS, REMOVE, SHOW
+from sterces_cli.constants import CONTEXT_SETTINGS
 
 
 @click.group()
-def group(context_settings=CONTEXT_SETTINGS):
-    """Action group for groups."""
+@click.pass_context
+def group(ctx: click.Context, context_settings=CONTEXT_SETTINGS):
+    """Command group for group management."""
 
 
 @group.command()
 @click.option("-p", "--path", type=str, help="specify group path")
-def add(path: str) -> NoReturn:
+@click.option("--quiet/--no-quiet", default=True, help="specify quiet flag")
+@click.pass_obj
+def add(ctx: StercesDatabase, path: str, quiet: bool) -> NoReturn:
     """Add group and show."""
-    sys.exit(app.group(path, ADD))
+    sys.exit(ctx.group(path, ADD, quiet))
 
 
 @group.command()
 @click.option("-p", "--path", type=str, help="specify group path")
-def remove(path: str) -> NoReturn:
+@click.option("--quiet/--no-quiet", default=True, help="specify quiet flag")
+@click.pass_obj
+def remove(ctx: StercesDatabase, path: str, quiet: bool) -> NoReturn:
     """Remove group and show."""
-    sys.exit(app.group(path, REMOVE))
+    sys.exit(ctx.group(path, REMOVE, quiet))
 
 
 @group.command()
-def show() -> NoReturn:
+@click.pass_obj
+def show(ctx: StercesDatabase) -> NoReturn:
     """Show groups."""
-    sys.exit(app.group(None, SHOW))
+    sys.exit(ctx.group(None, SHOW, quiet=False))

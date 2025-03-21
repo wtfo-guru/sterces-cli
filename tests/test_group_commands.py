@@ -1,10 +1,12 @@
+"""Tests module test_group_commands for app package sterces-cli."""
+
 import testfixtures
 
-from sterces import cli
+from sterces_cli import cli
 
 GG_HELP = """Usage: cli group [OPTIONS] COMMAND [ARGS]...
 
-  Action group for groups.
+  Command group for group management.
 
 Options:
   -h, --help  Show this message and exit.
@@ -17,6 +19,7 @@ Commands:
 
 
 def test_group_group_help(cli_runner) -> None:
+    """Test group group help."""
     test_result = cli_runner.invoke(
         cli.cli, ["group", "-h"]
     )  # verifies the short context
@@ -39,6 +42,7 @@ def test_group_add(cli_runner, gdbx: str, ppfn: str):
             "add",
             "--path",
             "/internet/email/gmail/qs5779/",
+            "--no-quiet",
         ],
     )
     assert fruit.exit_code == 0
@@ -63,6 +67,7 @@ def test_group_remove(cli_runner, gdbx: str, ppfn: str):
             "remove",
             "--path",
             "/internet",
+            "--no-quiet",
         ],
     )
     assert fruit.exit_code == 0

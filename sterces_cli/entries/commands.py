@@ -1,4 +1,4 @@
-"""Commands module entry of package sterces."""
+"""Commands module entry of app package sterces-cli."""
 
 import getpass
 import sys
@@ -6,15 +6,17 @@ from typing import NoReturn, Optional
 
 import click
 import pyotp
+from sterces.db import ATTRIBUTES, StercesDatabase
+from sterces.foos import str_to_date
 
-from sterces.app import ATTRIBUTES, app
-from sterces.constants import CONTEXT_SETTINGS
-from sterces.foos import add_arg, add_arg_if, str_to_date
+from sterces_cli.constants import CONTEXT_SETTINGS
+from sterces_cli.foos import StrIntStrBool, add_arg, add_arg_if
 
 
 @click.group()
-def entry(context_settings=CONTEXT_SETTINGS):
-    """Action group for entries."""
+@click.pass_context
+def entry(ctx: click.Context, context_settings=CONTEXT_SETTINGS):
+    """Command group for entry management."""
 
 
 @entry.command()
@@ -26,7 +28,9 @@ def entry(context_settings=CONTEXT_SETTINGS):
 @click.option("-T", "--tags", type=str, multiple=True, help="specify tags")
 @click.option("-u", "--username", type=str, help="specify username")
 @click.option("--url", type=str, help="specify url")
+@click.pass_obj
 def add(  # noqa: WPS231, C901
+    ctx: StercesDatabase,
     expires: Optional[str],
     notes: Optional[str],
     otp: Optional[str],
@@ -37,7 +41,7 @@ def add(  # noqa: WPS231, C901
     username: Optional[str],
 ) -> NoReturn:
     """Add or update an entry."""
-    sgrawk: dict[str, str] = {}
+    sgrawk: StrIntStrBool = {}
     if not path:
         raise ValueError("Path option cannot be empty")
     if expires:
@@ -57,7 +61,7 @@ def add(  # noqa: WPS231, C901
     add_arg_if(sgrawk, "password", password)
     add_arg_if(sgrawk, "url", url)
     add_arg_if(sgrawk, "username", username)
-    sys.exit(app.store(path, expiry, tags, **sgrawk))
+    sys.exit(ctx.store(path, expiry, tags, **sgrawk))
 
 
 @entry.command()
@@ -77,7 +81,9 @@ def add(  # noqa: WPS231, C901
 @click.option("-T", "--tags", type=str, multiple=True, help="specify tags")
 @click.option("-u", "--username", type=str, help="specify username")
 @click.option("--url", type=str, help="specify url")
+@click.pass_obj
 def update(
+    ctx: StercesDatabase,
     attrs: list[str],
     expires: Optional[str],
     notes: Optional[str],
@@ -97,15 +103,16 @@ def update(
                     attr, ",".join(ATTRIBUTES)
                 )
             )
-        add_arg(sgrawk, attr, eval(attr))
-    sys.exit(app.update(path, **sgrawk))
+        add_arg(sgrawk, attr, eval(attr))  # noqa: WPS421
+    sys.exit(ctx.update(path, **sgrawk))
 
 
 @entry.command()
 @click.option("-P", "--path", type=str, required=True, help="specify path of entry")
-def remove(path: str) -> NoReturn:
+@click.pass_obj
+def remove(ctx: StercesDatabase, path: str) -> NoReturn:
     """Remove specified entry."""
-    sys.exit(app.remove(path))
+    sys.exit(ctx.remove(path))
 
 
 @entry.command()
@@ -113,9 +120,10 @@ def remove(path: str) -> NoReturn:
 @click.option(
     "--mask/--no-mask", default=True, help="mask password flag (default True)"
 )
-def show(path: Optional[str], mask: bool) -> NoReturn:
+@click.pass_obj
+def show(ctx: StercesDatabase, path: Optional[str], mask: bool) -> NoReturn:
     """Show specified entry or all entries if path not specified."""
-    sys.exit(app.show(path, mask))
+    sys.exit(ctx.show(path, mask))
 
 
 @entry.command()
@@ -123,6 +131,7 @@ def show(path: Optional[str], mask: bool) -> NoReturn:
 @click.option(
     "--mask/--no-mask", default=True, help="mask password flag (default True)"
 )
-def dump(path: Optional[str], mask: bool) -> NoReturn:
+@click.pass_obj
+def dump(ctx: StercesDatabase, path: Optional[str], mask: bool) -> NoReturn:
     """Dump specified entry or all entries if path not specified."""
-    sys.exit(app.dump(path, mask))
+    sys.exit(ctx.dump(path, mask))
