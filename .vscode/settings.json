@@ -1,0 +1,23 @@
+{
+    "cSpell.words": [
+        "appdb",
+        "ENOENT",
+        "gdbx",
+        "joeblow",
+        "kdbx",
+        "keepass",
+        "passw",
+        "pkobj",
+        "ppfn",
+        "pykeepass",
+        "sdbx",
+        "sgrawk",
+        "ssapeek",
+        "strerror"
+    ],
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
