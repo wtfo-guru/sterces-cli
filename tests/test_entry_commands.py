@@ -119,7 +119,7 @@ def test_entry_remove(cli_runner, e_args: tuple[str, ...]):
     """Test entry remove."""
     args = ["--verbose"]
     args.extend(list(e_args).copy())
-    args = entry_args_path(args, "remove", ENTRY_TEST_UNO)
+    args = entry_args_path(tuple(args), "remove", ENTRY_TEST_UNO)
     fruit = cli_runner.invoke(cli.cli, args)
     assert fruit.exit_code == 0
     assert not fruit.exception
