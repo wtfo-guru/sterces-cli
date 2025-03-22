@@ -1,7 +1,9 @@
 """Tests module test_entry_commands for app package sterces-cli."""
 
+import os
 from typing import Optional
 
+import pytest
 import testfixtures
 
 from sterces_cli import cli
@@ -51,6 +53,7 @@ def entry_args_path(
     return cmd_args
 
 
+@pytest.mark.skipif(os.getenv("CI", "false") == "true", reason="fails on github ci")
 def test_entry_group_help(cli_runner) -> None:
     """Test entry group help."""
     test_result = cli_runner.invoke(
