@@ -28,23 +28,11 @@ def test_group_group_help(cli_runner) -> None:
     testfixtures.compare(GG_HELP, test_result.output)
 
 
-def test_group_add(cli_runner, gdbx: str, ppfn: str):
+def test_group_add(cli_runner, g_args: tuple[str, ...]):
     """Test group add."""
-    fruit = cli_runner.invoke(
-        cli.cli,
-        [
-            "--db",
-            gdbx,
-            "--passphrase-file",
-            ppfn,
-            "--no-warn",
-            "group",
-            "add",
-            "--path",
-            "/internet/email/gmail/qs5779/",
-            "--no-quiet",
-        ],
-    )
+    args = list(g_args).copy()
+    args.extend(["add", "--path", "/internet/email/gmail/qs5779/", "--no-quiet"])
+    fruit = cli_runner.invoke(cli.cli, args)
     assert fruit.exit_code == 0
     assert not fruit.exception
     assert (
@@ -53,23 +41,11 @@ def test_group_add(cli_runner, gdbx: str, ppfn: str):
     )
 
 
-def test_group_remove(cli_runner, gdbx: str, ppfn: str):
+def test_group_remove(cli_runner, g_args: tuple[str, ...]):
     """Test group remove."""
-    fruit = cli_runner.invoke(
-        cli.cli,
-        [
-            "--db",
-            gdbx,
-            "--passphrase-file",
-            ppfn,
-            "--no-warn",
-            "group",
-            "remove",
-            "--path",
-            "/internet",
-            "--no-quiet",
-        ],
-    )
+    args = list(g_args).copy()
+    args.extend(["remove", "--path", "/internet", "--no-quiet"])
+    fruit = cli_runner.invoke(cli.cli, args)
     assert fruit.exit_code == 0
     assert not fruit.exception
     assert '[Group: ""]' in fruit.output
