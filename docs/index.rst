@@ -9,6 +9,7 @@ Contents
 
   pages/changelog.rst
   pages/contributing.rst
+  pages/usage.rst
 
 
 Indices and tables

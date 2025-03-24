@@ -7,7 +7,7 @@ from typing import NoReturn, Optional
 import click
 from loguru import logger
 from pykeepass.pykeepass import debug_setup
-from sterces.db import StercesDatabase
+from sterces.db import ATTRIBUTES, StercesDatabase
 
 from sterces_cli.constants import CONTEXT_SETTINGS, VERSION
 from sterces_cli.entries import commands as entry_actions
@@ -95,11 +95,49 @@ def cli(
 cli.add_command(group_actions.group)
 cli.add_command(entry_actions.entry)
 
+LU_HELP1 = """Lookup attribute of an entry.
 
+ATTR must be one of:
+   {0}
+
+ATTR defaults to password when not specified
+"""
+
+LU_HELP = """
+ATTR must be one of: {0}
+
+ATTR defaults to password when not specified
+"""
+
+# class HelpLookupCmd(click.Command):
+#     def format_help(self, ctx, formatter):
+#         al = list(ATTRIBUTES)
+#         al.sort()
+#         click.echo(LU_HELP.format(", ".join(al)))
+
+LUH = "{0}\n\nATTR must be one of: {1}\n\nATTR defaults to password when not specified"
+
+
+def lu_help(ff):
+    """
+    Customize the lookup help message.
+
+    :param f: function to decorate
+    :return: decorated function
+    """
+    al = list(ATTRIBUTES)
+    al.sort()
+    ff.__doc__ = LUH.format(ff.__doc__, ", ".join(al))
+
+    return ff
+
+
+# @cli.command(cls=HelpLookupCmd)
 @cli.command()
 @click.argument("path", type=str)
 @click.argument("attr", default="password")
 @click.pass_obj
+@lu_help
 def lookup(ctx: StercesDatabase, path: str, attr: str) -> NoReturn:
     """Lookup attribute of an entry."""
     sys.exit(ctx.lookup(path, attr))
