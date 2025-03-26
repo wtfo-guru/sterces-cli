@@ -5,7 +5,7 @@
           "name": "Entry update command",
           "type": "debugpy",
           "request": "launch",
-          "module": "sterces.cli",
+          "module": "sterces_cli.cli",
           "justMyCode": false,
           "args": [
               "-d",
@@ -17,33 +17,37 @@
               "--path",
               "/test/test1",
               "-u",
-              "joeblow",
+              "joeblow"
           ]
       },
       {
           "name": "Entry add command",
           "type": "debugpy",
           "request": "launch",
-          "module": "sterces.cli",
+          "module": "sterces_cli.cli",
           "justMyCode": false,
           "args": [
               "-d",
               "--verbose",
+              "-D",
+              "/data/jim/development/python/packages/wtfimap/tests/data/test.kdbx",
+              "-p",
+              "/data/jim/development/python/packages/wtfimap/tests/data/test.ppf",
               "entry",
               "add",
               "--path",
-              "/test/test1",
-              "-p",
-              "passw0rd",
-              "--expires",
-              "2026-03-14"
+              "/test/orders",
+              "--username",
+              "/data/jim/development/python/packages/wtfimap/tests/data/test.kdbx",
+              "--url",
+              "http://localhost:8000"
           ]
       },
       {
           "name": "Group command",
           "type": "debugpy",
           "request": "launch",
-          "module": "sterces.cli",
+          "module": "sterces_cli.cli",
           "justMyCode": false,
           "args": ["-d", "group", "--remove", "--path", "/internet/"]
       }

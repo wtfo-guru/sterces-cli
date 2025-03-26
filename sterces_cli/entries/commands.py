@@ -129,9 +129,14 @@ def show(ctx: StercesDatabase, path: Optional[str], mask: bool) -> NoReturn:
 @entry.command()
 @click.option("-P", "--path", type=str, help="specify path of entry")
 @click.option(
+    "-i", "--indent", type=int, default=0, help="specify indent level, default 0"
+)
+@click.option(
     "--mask/--no-mask", default=True, help="mask password flag (default True)"
 )
 @click.pass_obj
-def dump(ctx: StercesDatabase, path: Optional[str], mask: bool) -> NoReturn:
+def dump(
+    ctx: StercesDatabase, path: Optional[str], mask: bool, indent: int
+) -> NoReturn:
     """Dump specified entry or all entries if path not specified."""
-    sys.exit(ctx.dump(path, mask))
+    sys.exit(ctx.dump(path, mask, indent))
