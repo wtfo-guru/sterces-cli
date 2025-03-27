@@ -5,7 +5,7 @@ name = "sterces-cli"
 description = "Command line interface for pykeepass"
 license = "MIT"
 keywords = []
-version = "0.1.0"
+version = "0.1.1-dev0"
 dynamic = ["classifiers"]
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5579@mail.com"}]
