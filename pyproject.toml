@@ -5,7 +5,7 @@ name = "sterces-cli"
 description = "Command line interface for pykeepass"
 license = "MIT"
 keywords = []
-version = "0.1.1-dev0"
+version = "0.1.1-dev1"
 dynamic = ["classifiers"]
 readme = "README.md"
 authors = [{name = "Quien Sabe", email = "qs5579@mail.com"}]
@@ -52,7 +52,6 @@ flake8-pytest-style = ">=1.6,<3.0"
 doc8 = "^1.0"
 docutils = "^0.21"
 nitpick = "^0.35"
-safety = ">=2.3,<4.0"
 pytest = ">=7.4,<9.0"
 pytest-cov = "^6.0.0"
 isort = "^6.0"
