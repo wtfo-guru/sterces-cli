@@ -4,7 +4,8 @@ import os
 from typing import Optional
 
 import pytest
-import testfixtures
+import testfixtures  # type: ignore[import-untyped]
+from click.testing import CliRunner
 
 from sterces_cli import cli
 from tests.conftest import TestExpiry
@@ -54,7 +55,7 @@ def entry_args_path(
 
 
 @pytest.mark.skipif(os.getenv("CI", "false") == "true", reason="fails on github ci")
-def test_entry_group_help(cli_runner) -> None:
+def test_entry_group_help(cli_runner: CliRunner) -> None:
     """Test entry group help."""
     test_result = cli_runner.invoke(
         cli.cli, ["entry", "-h"]
@@ -64,7 +65,9 @@ def test_entry_group_help(cli_runner) -> None:
     testfixtures.compare(EG_HELP, test_result.output)
 
 
-def test_entry_add(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
+def test_entry_add(
+    cli_runner: CliRunner, expiry: TestExpiry, e_args: tuple[str, ...]
+) -> None:
     """Test entry add."""
     cmd_args = entry_args_path(e_args, "add", ENTRY_TEST_UNO)
     cmd_args.extend(["-p", "passw0rd", "--expires", expiry.input])
@@ -80,7 +83,9 @@ def test_entry_add(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
     assert match in fruit.output
 
 
-def test_entry_add_dup(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
+def test_entry_add_dup(
+    cli_runner: CliRunner, expiry: TestExpiry, e_args: tuple[str, ...]
+) -> None:
     """Test entry add duplicate."""
     cmd_args = entry_args_path(e_args, "add", ENTRY_TEST_UNO)
     cmd_args.extend(["-p", "passw0rd", "--expires", expiry.input])
@@ -89,7 +94,9 @@ def test_entry_add_dup(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
     assert "Entry /test/test1 already exists" in fruit.output
 
 
-def test_entry_update_username(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
+def test_entry_update_username(
+    cli_runner: CliRunner, expiry: TestExpiry, e_args: tuple[str, ...]
+) -> None:
     """Test entry update."""
     cmd_args = entry_args_path(e_args, "update", ENTRY_TEST_UNO)
     cmd_args.extend(["-a", "username", "-u", "joeblow"])
@@ -104,7 +111,9 @@ def test_entry_update_username(cli_runner, expiry: TestExpiry, e_args: tuple[str
     assert match in fruit.output
 
 
-def test_entry_show_one(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...]):
+def test_entry_show_one(
+    cli_runner: CliRunner, expiry: TestExpiry, e_args: tuple[str, ...]
+) -> None:
     """Test entry show one."""
     cmd_args = entry_args_path(e_args, "show", ENTRY_TEST_UNO)
     fruit = cli_runner.invoke(cli.cli, cmd_args)
@@ -118,7 +127,7 @@ def test_entry_show_one(cli_runner, expiry: TestExpiry, e_args: tuple[str, ...])
     assert match in fruit.output
 
 
-def test_entry_remove(cli_runner, e_args: tuple[str, ...]):
+def test_entry_remove(cli_runner: CliRunner, e_args: tuple[str, ...]) -> None:
     """Test entry remove."""
     args = ["--verbose"]
     args.extend(list(e_args).copy())
@@ -130,7 +139,7 @@ def test_entry_remove(cli_runner, e_args: tuple[str, ...]):
     assert match in fruit.output
 
 
-def test_entry_show_none(cli_runner, e_args: tuple[str, ...]):
+def test_entry_show_none(cli_runner: CliRunner, e_args: tuple[str, ...]) -> None:
     """Test entry show none."""
     cmd_args = entry_args_path(e_args, "show")
     fruit = cli_runner.invoke(cli.cli, cmd_args)

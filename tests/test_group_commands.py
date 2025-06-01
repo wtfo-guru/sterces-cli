@@ -3,7 +3,8 @@
 import os
 
 import pytest
-import testfixtures
+import testfixtures  # type: ignore[import-untyped]
+from click.testing import CliRunner
 
 from sterces_cli import cli
 
@@ -22,7 +23,7 @@ Commands:
 
 
 @pytest.mark.skipif(os.getenv("CI", "false") == "true", reason="fails on github ci")
-def test_group_group_help(cli_runner) -> None:
+def test_group_group_help(cli_runner: CliRunner) -> None:
     """Test group group help."""
     test_result = cli_runner.invoke(
         cli.cli, ["group", "-h"]
@@ -32,7 +33,7 @@ def test_group_group_help(cli_runner) -> None:
     testfixtures.compare(GG_HELP, test_result.output)
 
 
-def test_group_add(cli_runner, g_args: tuple[str, ...]):
+def test_group_add(cli_runner: CliRunner, g_args: tuple[str, ...]) -> None:
     """Test group add."""
     args = list(g_args).copy()
     args.extend(["add", "--path", "/internet/email/gmail/qs5779/", "--no-quiet"])
@@ -45,7 +46,7 @@ def test_group_add(cli_runner, g_args: tuple[str, ...]):
     )
 
 
-def test_group_remove(cli_runner, g_args: tuple[str, ...]):
+def test_group_remove(cli_runner: CliRunner, g_args: tuple[str, ...]) -> None:
     """Test group remove."""
     args = list(g_args).copy()
     args.extend(["remove", "--path", "/internet", "--no-quiet"])

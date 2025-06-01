@@ -1,5 +1,6 @@
 """Commands module group of package sterces."""
 
+# mypy: disable-error-code=no-untyped-def
 import sys
 from typing import NoReturn
 

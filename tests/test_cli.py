@@ -1,6 +1,7 @@
 """Tests module test_cli for app package sterces-cli."""
 
-import testfixtures
+import testfixtures  # type: ignore[import-untyped]
+from click.testing import CliRunner
 
 from sterces_cli import cli
 from sterces_cli.constants import VERSION
@@ -27,15 +28,15 @@ Commands:
 """
 
 
-def test_cli_help(cli_runner):
+def test_cli_help(cli_runner: CliRunner) -> None:
     """Test help."""
-    fruit = cli_runner.invoke(cli.cli)
+    fruit = cli_runner.invoke(cli.cli, ["--help"])
     assert fruit.exit_code == 0
     assert not fruit.exception
     testfixtures.compare(CLI_HELP, fruit.output)
 
 
-def test_cli_version(cli_runner):
+def test_cli_version(cli_runner: CliRunner) -> None:
     """Test help."""
     fruit = cli_runner.invoke(cli.cli, ["--version"])
     assert fruit.exit_code == 0
