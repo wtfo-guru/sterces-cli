@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from shutil import rmtree
 from tempfile import mkdtemp
+from typing import Generator
 
 import pytest
 from sterces.foos import str_to_date
@@ -31,7 +32,7 @@ class TestExpiry:
 
 
 @pytest.fixture(scope="session")
-def t_ppf():
+def t_ppf() -> Generator[str, None, None]:
     """Create a temp directory to house test files."""
     td = mkdtemp()
     fn = "{0}/.ssapeek".format(td)
@@ -45,7 +46,7 @@ def t_ppf():
 
 
 @pytest.fixture(scope="session")
-def e_args(t_ppf) -> tuple[str, ...]:
+def e_args(t_ppf: str) -> tuple[str, ...]:
     """Return name of test cache file."""
     td = Path(t_ppf).parent
     return (  # noqa: WPS227
@@ -59,7 +60,7 @@ def e_args(t_ppf) -> tuple[str, ...]:
 
 
 @pytest.fixture(scope="session")
-def g_args(t_ppf) -> tuple[str, ...]:
+def g_args(t_ppf: str) -> tuple[str, ...]:
     """Return name of test cache file."""
     td = Path(t_ppf).parent
     return (  # noqa: WPS227
@@ -73,6 +74,6 @@ def g_args(t_ppf) -> tuple[str, ...]:
 
 
 @pytest.fixture(scope="session")
-def expiry():
+def expiry() -> TestExpiry:
     """Return class for in/out expiry comparisons."""
     return TestExpiry()

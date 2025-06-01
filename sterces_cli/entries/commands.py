@@ -1,5 +1,6 @@
 """Commands module entry of app package sterces-cli."""
 
+# mypy: disable-error-code=no-untyped-def
 import getpass
 import sys
 from typing import NoReturn, Optional

@@ -6,7 +6,7 @@ from typing import NoReturn, Optional
 
 import click
 from loguru import logger
-from pykeepass.pykeepass import debug_setup
+from pykeepass.pykeepass import debug_setup  # type: ignore[import-untyped]
 from sterces.db import ATTRIBUTES, StercesDatabase
 
 from sterces_cli.constants import CONTEXT_SETTINGS, VERSION
@@ -118,11 +118,11 @@ ATTR defaults to password when not specified
 LUH = "{0}\n\nATTR must be one of: {1}\n\nATTR defaults to password when not specified"
 
 
-def lu_help(ff):
+def lu_help(ff):  # type: ignore[no-untyped-def]
     """
     Customize the lookup help message.
 
-    :param f: function to decorate
+    :param ff: function to decorate
     :return: decorated function
     """
     al = list(ATTRIBUTES)
@@ -137,7 +137,7 @@ def lu_help(ff):
 @click.argument("path", type=str)
 @click.argument("attr", default="password")
 @click.pass_obj
-@lu_help
+@lu_help  # type: ignore[misc]
 def lookup(ctx: StercesDatabase, path: str, attr: str) -> NoReturn:
     """Lookup attribute of an entry."""
     sys.exit(ctx.lookup(path, attr))
